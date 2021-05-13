@@ -1,0 +1,3 @@
+mounts:
+  - mount: /mount/nfs-1
+    command: systemctl restart nfs-mount.service
