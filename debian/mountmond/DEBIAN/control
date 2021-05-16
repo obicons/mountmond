@@ -1,0 +1,9 @@
+Package: mountmond
+Version: 0.25-1
+Architecture: amd64
+Maintainer: Max Taylor <taylor.2751@osu.edu>
+Installed-Size: 2352
+Section: misc
+Priority: optional
+Description: monitors mounts
+ mountmond monitors your mounts.
