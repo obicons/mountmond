@@ -3,7 +3,7 @@ Maintainer: Max Taylor <taylor.2751@osu.edu>
 Section: misc
 Priority: optional
 Standards-Version: 4.5.0
-Build-Depends: debhelper (>= 9), golang (>= 1.13) 
+Build-Depends: debhelper (>= 9)
 
 Package: mountmond
 Architecture: any

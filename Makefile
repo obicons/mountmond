@@ -7,6 +7,9 @@ $(TARGET): $(GOSRC)
 .PHONY: build
 build: $(TARGET)
 
+.PHONY: dummy
+dummy:
+
 .PHONY: test
 test:
 	go test -v ./...

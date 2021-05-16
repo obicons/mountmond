@@ -5,3 +5,8 @@
 override_dh_auto_install:
 	$(MAKE) PREFIX=$$(pwd)/debian/mountmond install
 
+override_dh_auto_build:
+
+override_dh_auto_test:
+
+override_dh_auto_clean:
