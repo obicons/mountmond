@@ -24,20 +24,19 @@ const (
 )
 
 /*
- * Reads formatted lines (see man fstab) from reader.
+ * Reads formatted lines (see man fstab) from reader into stream.
  */
-func ReadMTab(reader io.Reader) []MTabEntry {
-	var tabs []MTabEntry
+func ReadMTab(reader io.Reader, stream chan<- MTabEntry) {
 	scanner := bufio.NewScanner(reader)
 	for scanner.Scan() {
 		tab, err := ParseMTabLine(scanner.Text())
 		if err != nil {
 			log.Println(err)
 		} else {
-			tabs = append(tabs, tab)
+			stream <- tab
 		}
 	}
-	return tabs
+	close(stream)
 }
 
 /*

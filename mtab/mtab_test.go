@@ -116,9 +116,14 @@ func TestParseMTabLineRoutine(t *testing.T) {
 
 func TestReadMTabEOF(t *testing.T) {
 	sr := strings.NewReader("")
-	tabs := ReadMTab(sr)
-	if len(tabs) != 0 {
-		t.Fatalf("len(tabs) = %d, want 0", len(tabs))
+	ch := make(chan MTabEntry)
+	go ReadMTab(sr, ch)
+	count := 0
+	for range ch {
+		count++
+	}
+	if count != 0 {
+		t.Fatalf("count = %d, want 0", count)
 	}
 }
 
@@ -126,8 +131,13 @@ func TestReadMTabRoutine(t *testing.T) {
 	sr := strings.NewReader(
 		"a b c d,e=fgh,j=klm 1 2\n" + "a b c d\n",
 	)
-	tabs := ReadMTab(sr)
-	if len(tabs) != 2 {
-		t.Fatalf("len(tabs) = %d, want 2", len(tabs))
+	count := 0
+	ch := make(chan MTabEntry)
+	go ReadMTab(sr, ch)
+	for range ch {
+		count++
+	}
+	if count != 2 {
+		t.Fatalf("count = %d, want 2", count)
 	}
 }

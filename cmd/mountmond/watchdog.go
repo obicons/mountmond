@@ -34,7 +34,7 @@ type WatchDog struct {
 /*
  * Builds and initializes a new WatchDog.
  * missingMountCmds - stores commands execute when mounts are missing.
- * Post: !running(w).
+ * Post: !running(NewWatchDog(missingMountCmds)).
  */
 func NewWatchDog(missingMountCmds map[string]string) *WatchDog {
 	return &WatchDog{
@@ -109,9 +109,12 @@ func (w *WatchDog) checkInOnChildren() {
  * Checks if a mount is missing. If it is, executes the designated command.
  */
 func (w *WatchDog) checkForMissingMounts(mTabFile *os.File) {
-	tabs := mtab.ReadMTab(mTabFile)
 	presenceSet := make(map[string]bool)
-	for _, tab := range tabs {
+	tabChan := make(chan mtab.MTabEntry)
+
+	go mtab.ReadMTab(mTabFile, tabChan)
+
+	for tab := range tabChan {
 		presenceSet[tab.MountPath] = true
 	}
 
@@ -121,7 +124,7 @@ func (w *WatchDog) checkForMissingMounts(mTabFile *os.File) {
 			continue
 		}
 
-		// run any commands found
+		// run the command
 		if _, found := presenceSet[mount]; !found {
 			log.Printf("%s is missing. Running its command...\n", mount)
 			runner := exec.Command("sh", "-c", cmd)
